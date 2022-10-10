@@ -1,0 +1,57 @@
+import pandas as pd # data processing
+import numpy as np # working with arrays
+import itertools # construct specialized tools
+import matplotlib.pyplot as plt # visualizations
+from matplotlib import rcParams # plot size customization
+from sklearn.model_selection import train_test_split # splitting the data
+from sklearn.linear_model import LogisticRegression # model algorithm
+from sklearn.preprocessing import StandardScaler # data normalization
+from sklearn.metrics import precision_score # evaluation metric
+from sklearn.metrics import log_loss # evaluation metric
+
+
+data = pd.read_excel('/Users/nahariaprateek/Downloads/UV6696-XLS-ENG.xlsx', sheet_name=2)
+data.head(5)
+data.describe()
+data.info()
+X_var = np.asarray(data[['customerAge', 'CHIScoreMonth0', 'CHIScore 0-1', 'SupportCasesMonth 0', 'SupportCases0-1', 
+                       'SPMonth 0', 'SP0-1', 'Logins0-1', 'BlogArticles0-1', 'Views0-1', 'DaysSinceLastLogin0-1']])
+y_var = np.asarray(data['churn'])
+
+
+print( X_var[:5])
+print('y_var samples : ', y_var[:5])
+
+X_var = StandardScaler().fit(X_var).transform(X_var)
+print( X_var[:5])
+# prediction
+# entire dataset
+yhat2 = lr2.predict(X_var)
+yhat_prob2 = lr2.predict_proba(X_var)
+# customer 5203
+print('yhat samples : ', yhat2[5203:5204])
+print('yhat_prob samples : ', yhat_prob2[5203:5204])
+
+# customer 672
+print('yhat samples : ', yhat2[672:673])
+print('yhat_prob samples : ', yhat_prob2[672:673])
+
+# customer 354
+print('yhat samples : ', yhat2[354:355])
+print('yhat_prob samples : ', yhat_prob2[354:355])
+print((precision_score(y_var, yhat2).round(2)))
+print(log_loss(y_var, yhat2).round(2))
+data.corr()
+print(yhat_prob2[:,1])
+data.insert(loc=3,column='probability_of_churn',value=yhat_prob2[:,1])
+data.head()
+print(yhat_prob2[:,0])
+data.to_excel('/Users/nahariaprateek/Downloads/predictions_output.xlsx')
+
+
+
+
+
+
+
+
